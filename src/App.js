@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import SelectButton from './SelectButton';
 
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import CardContext from '.';
 
 import Stack from 'react-bootstrap/Stack';
@@ -26,23 +26,21 @@ function App() {
   const [selectedCards, setSelectedCards] = useState([]);
   // Reactionカードを追加するかどうか
   const [addReaction, setAddReaction] = useState(false)
-  // const [averageCost, setAverageCost] = useState(4.0);
+
+  const maxAttackRef = useRef();
 
   const aveCostRef = useRef();
-  const maxAttackRef = useRef();
+  useEffect(() => {
+    const aveCostInput = aveCostRef.current;
+    if (aveCostInput) {
+      aveCostInput.value = 4.2; // 初期値を設定する
+    }
+  }, []);
 
   // Check状態を変更
   const changeChecked = () => {
     setAddReaction(prevState => !prevState);
   }
-
-  // 確認用
-  const handleConsole = () => {
-    const maxAttack = maxAttackRef.current.value;
-    const aveCost = aveCostRef.current.value;
-    console.log(maxAttack, ":",aveCost)
-  }
-
 
   const [showModal, setShowModal] = useState(false);
   const handleClose = () => setShowModal(false);
@@ -77,16 +75,6 @@ function App() {
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home" className='setting'>Dominion Card Selector</Navbar.Brand>
         <Nav className="mr-auto">
-          {/* <Nav.Link href="#home">Home</Nav.Link> */}
-          {/* <div className='setting'>
-            <SelectButton
-            maxAttackRef={maxAttackRef}
-            aveCostRef={aveCostRef}
-            setSelectedCards={setSelectedCards}
-            addReaction={addReaction}
-            handle={handle}
-            />
-          </div> */}
         </Nav>
       </Navbar>
 
@@ -101,7 +89,7 @@ function App() {
         ref={aveCostRef}
         id="averageCostInput"
         name="averageCostInput"
-        min="3.2" max="5.0" step="0.1"
+        min="3.5" max="4.7" step="0.1"
         onChange={handleInputChange}
         />
         <span id="averageCostValue">4.2</span>

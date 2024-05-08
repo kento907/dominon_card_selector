@@ -12,10 +12,10 @@ import html2canvas from "html2canvas";
 const CardListModal = ({maxAttackRef, aveCostRef}) => {
 
 	const [showModal, setShowModal] = useState(false);
-	 // 選択されたカードを保持するstate
-	 const [selectedCards, setSelectedCards] = useState([]);
-	 // Reactionカードを追加するかどうか
-	 const [addReaction, setAddReaction] = useState(false)
+	// 選択されたカードを保持するstate
+	const [selectedCards, setSelectedCards] = useState([]);
+	// Reactionカードを追加するかどうか
+	const [addReaction, setAddReaction] = useState(false)
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 

@@ -8,30 +8,25 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 
 	// 複製
 	const cardInfo = useContext(CardContext)
-	let cardList = cardInfo
 
 	const handleSelect = () => {
-
-		// 以前の追加分削除
-		if (cardList.length > 25) {
-			cardList = cardList.slice(0, 25);
-		}
-
 		// 設定
-		const MAX_ATTACK = maxAttackRef.current.value;
-		const AVE_COST = aveCostRef.current.value;
+		const MAX_ATTACK = parseInt(maxAttackRef.current.value);
+		const AVE_COST = parseFloat(aveCostRef.current.value);
 
+		let cardList = [...cardInfo]
 		let countAttack = 0;
 		let moatFlag = false;
-
 		let selectedCards = [];
-		while (selectedCards.length < 10) {
+		let averageCost = 0
+
+		while (true) {
 
 			// カード選択
 			const index = Math.floor(Math.random() * cardList.length); // cards.lengthは可変
       		const card = cardList[index];
-			if (selectedCards.includes(card)) {
-				continue; // すでに選択済みのカードは選ばない
+			if ( selectedCards.includes(card) || (MAX_ATTACK === 0 && card.type === "Attack") ) {
+				continue; // "すでに選択済み" or "Attackカードの上限0のときのAttack選択"：カード選ばない
 			} else {
 				// カード追加
 				selectedCards.push(card);
@@ -41,25 +36,47 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 			console.log(cardList)
 			console.log(cardList.length)
 
-			// Attackカード多い：堀選ばれやすくする
-			if (addReaction === true) {
-				// Attackカード選択：堀追加
-				if (card.type === "Attack" && moatFlag === false) {
-					cardList.push({ number: 1, name: "堀", type: "Reaction", cost: 2 });
-					countAttack++;
+			if (card.type === "Attack") {
+				countAttack++;
 
-					// Attack枚数が上限：cardsからAttackカード削除
-					if (countAttack === MAX_ATTACK) {
-						cardList = cardList.filter(c => c.type !== "Attack");
-					}
+				// Attackカードの上限処理
+				if (countAttack === MAX_ATTACK) {
+					cardList = cardList.filter(c => c.type !== "Attack");
 				}
-				// 堀選択：堀削除
-				if (card.name === "堀") {
-						moatFlag = true;
-						cardList = cardList.filter(c => c.name !== "堀");
+
+				// Attackカード選択：堀追加
+				if (addReaction === true && moatFlag === false) {
+					cardList.push({ number: 1, name: "堀", type: "Reaction", cost: 2 });
 				}
 			}
+			// 堀選択：堀削除
+			if (card.name === "堀") {
+				moatFlag = true;
+				cardList = cardList.filter(c => c.name !== "堀");
+			}
 
+			// 終了判定
+			if (selectedCards.length === 10) {
+
+				// 平均コスト計算
+				averageCost = 0
+				for(let i = 0; i < 10; i++) {
+					averageCost += selectedCards[i].cost
+					console.log(averageCost)
+					console.log(AVE_COST)
+				}
+				averageCost /= 10;
+
+				// 平均コスト一致：完了
+				if (averageCost === AVE_COST) {
+					break
+				}
+				// リセット
+				selectedCards = []
+				countAttack = 0;
+				moatFlag = false;
+				cardList = [...cardInfo]
+			}
 		};
 
 		// カード情報を更新
@@ -78,6 +95,8 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 		console.log(addReaction)
 
 		handle(selectedCards)
+
+		console.log(MAX_ATTACK)
   };
 
 
