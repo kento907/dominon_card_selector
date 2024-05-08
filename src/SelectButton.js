@@ -20,6 +20,7 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 		let selectedCards = [];
 		let averageCost = 0
 
+		console.log("OK")
 		while (true) {
 
 			// カード選択
@@ -66,6 +67,7 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 				if (averageCost === AVE_COST) {
 					break
 				}
+
 				// リセット
 				selectedCards = []
 				countAttack = 0;
