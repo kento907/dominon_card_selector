@@ -32,10 +32,7 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 				selectedCards.push(card);
 			}
 
-			console.log(card)
-			console.log(cardList)
-			console.log(cardList.length)
-
+			// Attack選択時処理
 			if (card.type === "Attack") {
 				countAttack++;
 
@@ -62,8 +59,6 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 				averageCost = 0
 				for(let i = 0; i < 10; i++) {
 					averageCost += selectedCards[i].cost
-					console.log(averageCost)
-					console.log(AVE_COST)
 				}
 				averageCost /= 10;
 
@@ -81,24 +76,10 @@ const SelectButton = ({ maxAttackRef, aveCostRef, setSelectedCards, addReaction,
 
 		// カード情報を更新
 		setSelectedCards(selectedCards, addReaction);
-
-		// ------------------------- 表示 ---------------------------
 		// コスト順に並べ替え
 		selectedCards.sort((a, b) => a.cost - b.cost);
-		// 選ばれたカードを表示
-		let i=0;
-		while (i < 10) {
-			console.log(selectedCards[i].cost,selectedCards[i].name)
-			i++
-		}
-		// ---------------------------------------------------------
-		console.log(addReaction)
-
 		handle(selectedCards)
-
-		console.log(MAX_ATTACK)
   };
-
 
   return (
 		<Button variant="outline-primary" onClick={handleSelect} >Select</Button>
